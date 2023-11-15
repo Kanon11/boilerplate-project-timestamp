@@ -25,8 +25,14 @@ app.get("/", function (req, res) {
 // app.get("/api/hello", function (req, res) {
 //   res.json({greeting: 'hello API'});
 // });
-app.get("/api/:date", (req, res) => {
-  let inputDate = req.params.date;
+app.get("/api/:date?", (req, res) => {
+
+  if (!!!req.params.date) {
+    inputDate = new Date();
+  }
+  else {
+    inputDate = req.params.date;
+  }
   let timestampMillisecond;
   if (!isNaN(Date.parse(inputDate))) {
     timestampMillisecond = Math.floor(new Date(inputDate).getTime())
@@ -35,7 +41,7 @@ app.get("/api/:date", (req, res) => {
     timestampMillisecond = parseInt(inputDate);
   }
   else {
-    return res.send({ error: 'invalid date' });
+    return res.send({ error: 'Invalid Date' });
   }
   return res.send({ unix: timestampMillisecond, utc: new Date(timestampMillisecond).toUTCString()})
 })
